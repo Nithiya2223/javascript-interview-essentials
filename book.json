@@ -1,0 +1,29 @@
+{
+  "title": "JavaScript Internals: Interview Revision Guide",
+  "chapters": [
+    { "num": 1,  "slug": "execution-context",      "title": "Execution Context & Call Stack",                       "short": "Execution Context & Call Stack" },
+    { "num": 2,  "slug": "hoisting-tdz",           "title": "Hoisting & Temporal Dead Zone",                        "short": "Hoisting & TDZ" },
+    { "num": 3,  "slug": "scope-chain",            "title": "Scope, Lexical Environment & Scope Chain",             "short": "Scope & Scope Chain" },
+    { "num": 4,  "slug": "closures",               "title": "Closures",                                             "short": "Closures" },
+    { "num": 5,  "slug": "this-binding",           "title": "The this Keyword & Binding Rules",                     "short": "this & Binding Rules" },
+    { "num": 6,  "slug": "prototypes",             "title": "Prototypes & Prototypal Inheritance",                  "short": "Prototypes" },
+    { "num": 7,  "slug": "event-loop",             "title": "Event Loop, Task Queues & Microtasks",                 "short": "Event Loop" },
+    { "num": 8,  "slug": "promises",               "title": "Promises Internals",                                   "short": "Promises" },
+    { "num": 9,  "slug": "async-await",            "title": "async/await Internals",                                "short": "async/await" },
+    { "num": 10, "slug": "callbacks",              "title": "Callbacks, Callback Hell & Inversion of Control",      "short": "Callbacks" },
+    { "num": 11, "slug": "currying-composition",   "title": "Currying, Partial Application & Function Composition", "short": "Currying & Composition" },
+    { "num": 12, "slug": "higher-order-functions", "title": "Higher-Order Functions: map, filter, reduce",          "short": "Higher-Order Functions" },
+    { "num": 13, "slug": "debounce-throttle",      "title": "Debouncing & Throttling",                              "short": "Debounce & Throttle" },
+    { "num": 14, "slug": "memoization",            "title": "Memoization & Pure Functions",                         "short": "Memoization" },
+    { "num": 15, "slug": "iterators-generators",   "title": "Iterators, Generators & the Iteration Protocols",      "short": "Iterators & Generators" },
+    { "num": 16, "slug": "garbage-collection",     "title": "Garbage Collection & Memory Management",               "short": "Garbage Collection" },
+    { "num": 17, "slug": "type-coercion",          "title": "Type Coercion, Equality & Number Quirks",              "short": "Type Coercion" },
+    { "num": 18, "slug": "copying-immutability",   "title": "Shallow vs Deep Copy, Immutability & structuredClone", "short": "Copying & Immutability" },
+    { "num": 19, "slug": "modules",                "title": "Modules: CommonJS vs ESM",                             "short": "Modules" },
+    { "num": 20, "slug": "proxy-reflect-symbols",  "title": "Proxy, Reflect, Symbols & Weak References",            "short": "Proxy, Symbols, Weak refs" },
+    { "num": 21, "slug": "errors-strict-misc",     "title": "Error Handling, Strict Mode & Misc Internals",         "short": "Errors, Strict Mode, Misc" },
+    { "num": 22, "slug": "mixed-puzzles",          "title": "Mixed Output-Prediction Puzzles",                      "short": "Mixed Puzzles" },
+    { "num": 23, "slug": "machine-coding",         "title": "Top 30 Machine-Coding & Polyfill Problems",            "short": "Machine-Coding Problems" },
+    { "num": 24, "slug": "revision-sheet",         "title": "Last-Day Revision Sheet",                              "short": "Last-Day Revision" }
+  ]
+}

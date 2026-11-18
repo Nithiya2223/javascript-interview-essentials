@@ -1,0 +1,19 @@
+{
+  "name": "javascript-interview-essentials",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JavaScript Internals: Interview Revision Guide (Markdown sources, diagram pipeline and PDF build)",
+  "scripts": {
+    "lint": "node scripts/lint-chapters.js",
+    "samples": "node scripts/verify-samples.js",
+    "diagrams": "node scripts/render-diagrams.js",
+    "readme": "node scripts/build-readme.js",
+    "build": "node scripts/build-book.js",
+    "verify": "node scripts/verify-pdf.js",
+    "all": "npm run lint && npm run samples && npm run build && npm run verify && npm run readme"
+  },
+  "engines": { "node": ">=18" },
+  "devDependencies": {
+    "playwright-core": "^1.50.0"
+  }
+}

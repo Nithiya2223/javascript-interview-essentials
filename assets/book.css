@@ -1,0 +1,124 @@
+/* Print stylesheet for "JavaScript Internals: Interview Revision Guide".
+   Black-and-white safe: no information is carried by colour alone.
+   Fonts are embedded from vendor/fonts (paths relative to build/book.html). */
+
+@font-face { font-family: "Noto Sans"; src: url("../vendor/fonts/NotoSans-VF.ttf"); font-weight: 100 900; font-style: normal; }
+@font-face { font-family: "Noto Sans"; src: url("../vendor/fonts/NotoSans-Italic-VF.ttf"); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: "Source Code Pro"; src: url("../vendor/fonts/SourceCodePro-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Source Code Pro"; src: url("../vendor/fonts/SourceCodePro-Bold.ttf"); font-weight: 700; }
+
+@page {
+  size: A4;
+  margin: 20mm 18mm 22mm 18mm;
+  @top-left { content: "JavaScript Internals: Interview Revision Guide"; font: 7.5pt "Noto Sans", sans-serif; color: #333; vertical-align: bottom; padding-bottom: 3mm; }
+  @bottom-center { content: counter(page); font: 9pt "Noto Sans", sans-serif; color: #000; vertical-align: top; padding-top: 4mm; }
+}
+@page cover { margin: 0; @top-left { content: none; } @top-right { content: none; } @bottom-center { content: none; } }
+
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0; color: #000; background: #fff;
+  font-family: "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 9.6pt; line-height: 1.42; orphans: 3; widows: 3;
+  font-variant-numeric: lining-nums;
+}
+p { margin: 0 0 6pt; }
+ul, ol { margin: 0 0 6pt; padding-left: 16pt; }
+li { margin: 0 0 2pt; }
+li > p { margin-bottom: 2pt; }
+strong { font-weight: 700; }
+a { color: inherit; text-decoration: none; }
+hr { border: 0; border-top: 0.6pt solid #000; margin: 10pt 0; }
+
+/* ---------- headings ---------- */
+h1, h2, h3, h4, h5 { break-after: avoid; page-break-after: avoid; line-height: 1.2; }
+.chapter > h1 {
+  break-before: page; margin: 0 0 14pt; padding: 0 0 8pt;
+  font-size: 22pt; font-weight: 800; border-bottom: 2.2pt solid #000;
+}
+.chapter > h1 .ch-label { display: block; font-size: 10pt; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4pt; }
+h2 { font-size: 14pt; font-weight: 800; margin: 18pt 0 7pt; padding-bottom: 2pt; border-bottom: 0.8pt solid #000; }
+h3 { font-size: 11.2pt; font-weight: 800; margin: 14pt 0 5pt; }
+h4 { font-size: 10pt; font-weight: 800; margin: 11pt 0 4pt; text-transform: uppercase; letter-spacing: 0.06em; }
+h5 { font-size: 9.6pt; font-weight: 800; margin: 8pt 0 3pt; }
+h3.q { padding: 3pt 6pt; border: 0.8pt solid #000; background: #f0f0f0; break-inside: avoid; }
+h2.questions { break-before: page; }
+
+/* ---------- code ---------- */
+code { font-family: "Source Code Pro", monospace; font-size: 0.88em; background: #eee; padding: 0 2pt; border-radius: 1.5pt; }
+pre {
+  position: relative; margin: 4pt 0 8pt; padding: 6pt 8pt; overflow: hidden;
+  font-family: "Source Code Pro", monospace; font-size: 7.9pt; line-height: 1.34;
+  background: #f7f7f7; border: 0.6pt solid #000; white-space: pre; tab-size: 2;
+}
+pre.short { break-inside: avoid; }
+pre code { background: none; padding: 0; font-size: inherit; border-radius: 0; }
+pre[data-lang]::before {
+  content: attr(data-lang); position: absolute; top: 0; right: 0; padding: 0 5pt;
+  font: 700 6.5pt "Noto Sans", sans-serif; letter-spacing: 0.08em; text-transform: uppercase;
+  background: #000; color: #fff;
+}
+pre.output { background: #fff; border-style: dashed; }
+pre.output::before { content: "Output"; position: absolute; top: 0; right: 0; padding: 0 5pt; font: 700 6.5pt "Noto Sans", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; background: #fff; color: #000; border-left: 0.6pt dashed #000; border-bottom: 0.6pt dashed #000; }
+pre.ascii { background: #fff; border: 0; padding: 2pt 0 0; font-size: 7.9pt; }
+pre.ascii::before { content: none; }
+
+/* ---------- figures ---------- */
+figure.fig { margin: 8pt 0 10pt; padding: 6pt 6pt 4pt; border: 0.6pt solid #888; text-align: center; break-inside: avoid; page-break-inside: avoid; }
+figure.fig img { display: inline-block; max-width: 100%; max-height: 200mm; height: auto; width: auto; }
+figure.fig.ascii-fig { text-align: left; padding: 6pt 8pt 4pt; border: 0.8pt solid #000; }
+figure.fig.ascii-fig pre { display: inline-block; margin: 0; }
+.figcap { margin: 5pt 0 0; font-size: 8.4pt; font-weight: 700; text-align: left; text-transform: none; letter-spacing: 0; border-top: 0.5pt solid #888; padding-top: 3pt; }
+figure.fig img + .figcap { text-align: left; }
+
+/* ---------- call-out boxes ---------- */
+blockquote { margin: 6pt 0 10pt; padding: 6pt 10pt; border-left: 3pt solid #000; background: #f5f5f5; break-inside: avoid; }
+blockquote > :last-child { margin-bottom: 0; }
+blockquote .box-title { display: block; margin: 0 0 3pt; font-size: 7.8pt; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+blockquote.say { border: 1.2pt solid #000; border-left-width: 5pt; background: #fff; }
+blockquote.model { border: 0.8pt solid #000; border-left-width: 5pt; background: #fff; }
+blockquote.trap { border: 1pt dashed #000; border-left: 5pt double #000; background: #fff; }
+blockquote.cheat { border: 1.2pt solid #000; background: #f5f5f5; }
+
+/* ---------- tables ---------- */
+table { border-collapse: collapse; width: 100%; margin: 4pt 0 10pt; font-size: 8.6pt; break-inside: auto; }
+th, td { border: 0.6pt solid #000; padding: 2.5pt 5pt; vertical-align: top; text-align: left; }
+th { background: #e6e6e6; font-weight: 800; }
+tr { break-inside: avoid; }
+
+.star { display: inline-block; width: 0.95em; height: 0.95em; vertical-align: -0.1em; margin-right: 1pt; }
+.diff { font-weight: 700; }
+
+/* ---------- cover ---------- */
+.cover { page: cover; width: 210mm; height: 296mm; position: relative; break-after: page; overflow: hidden; }
+.cover .band { position: absolute; left: 0; right: 0; top: 0; height: 14mm; background: #000; }
+.cover .inner { position: absolute; left: 24mm; right: 24mm; top: 72mm; }
+.cover .kicker { font-size: 11pt; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; margin-bottom: 8mm; }
+.cover h1 { font-size: 46pt; line-height: 1.04; font-weight: 800; margin: 0 0 6mm; border: 0; padding: 0; break-before: avoid; }
+.cover .subtitle { font-size: 22pt; font-weight: 300; margin: 0 0 14mm; padding-bottom: 8mm; border-bottom: 3pt solid #000; }
+.cover .audience { font-size: 12pt; margin: 0 0 3mm; }
+.cover .scope { font-size: 10pt; color: #222; max-width: 130mm; }
+.cover .stack { position: absolute; right: 24mm; bottom: 28mm; width: 52mm; }
+.cover .stack div { border: 1.6pt solid #000; padding: 2.6mm 3mm; margin-top: -1.6pt; font: 700 9pt "Source Code Pro", monospace; background: #fff; }
+.cover .stack div:first-child { background: #000; color: #fff; }
+.cover .foot { position: absolute; left: 24mm; bottom: 20mm; font-size: 9pt; }
+
+/* ---------- front matter ---------- */
+.front { break-before: page; }
+.front > h1 { font-size: 22pt; font-weight: 800; margin: 0 0 12pt; padding-bottom: 6pt; border-bottom: 2.2pt solid #000; break-before: avoid; }
+.front ul { list-style: none; padding: 0; margin: 0; }
+.toc li { margin: 0; }
+.front .row { display: flex; align-items: baseline; gap: 4pt; }
+.front .row .t { flex: 0 1 auto; }
+.front .row .dots { flex: 1 1 auto; border-bottom: 1pt dotted #000; transform: translateY(-2pt); min-width: 12pt; }
+.front .row .pg { flex: 0 0 auto; font-variant-numeric: tabular-nums; min-width: 16pt; text-align: right; }
+.toc li.ch { margin-top: 7pt; font-weight: 800; font-size: 10.4pt; }
+.toc li.sec { margin-left: 16pt; font-size: 8.8pt; font-weight: 400; }
+.toc li.planned { color: #444; font-weight: 400; font-style: italic; }
+.lof li { margin: 0; font-size: 8.8pt; }
+.lof li.chhead { margin-top: 7pt; font-weight: 800; font-size: 9.6pt; }
+.lof ul { list-style: none; padding: 0; margin: 0; }
+
+.where { break-after: avoid; page-break-after: avoid; margin-bottom: 4pt; }
+pre.short:not(.output) { break-after: avoid; page-break-after: avoid; }
