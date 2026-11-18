@@ -32,11 +32,6 @@ const MERMAID_CONFIG = {
     messageFontSize: 14, actorFontSize: 14, noteFontSize: 14,
   },
   state: { useMaxWidth: false },
-  // White halo behind edge/transition labels so lines never strike through text
-  // (SVG text labels have no background box).
-  themeCSS:
-    '.edgeLabel text, .edgeLabel tspan, .transition-label text, .messageText, .labelText' +
-    '{paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round;}',
   // Greyscale only: diagrams must read in black-and-white print.
   themeVariables: {
     background: '#ffffff',
@@ -127,7 +122,29 @@ async function main() {
       try {
         await window.__mm.parse(src);
         const { svg } = await window.__mm.render('mm-' + id, src);
-        return { svg };
+        // Put ONE white rectangle behind every edge/message label so lines never strike
+        // through text. (A stroke "halo" would draw each word twice into the PDF text layer.)
+        const host = document.createElement('div');
+        host.style.cssText = 'position:absolute;left:0;top:0;visibility:hidden';
+        host.innerHTML = svg;
+        document.body.appendChild(host);
+        const root = host.querySelector('svg');
+        const NS = 'http://www.w3.org/2000/svg';
+        root.querySelectorAll('.edgeLabel text, text.messageText').forEach((t) => {
+          const b = t.getBBox();
+          if (!b.width || !b.height) return;
+          const r = document.createElementNS(NS, 'rect');
+          r.setAttribute('x', b.x - 3);
+          r.setAttribute('y', b.y - 1);
+          r.setAttribute('width', b.width + 6);
+          r.setAttribute('height', b.height + 2);
+          r.setAttribute('fill', '#ffffff');
+          if (t.getAttribute('transform')) r.setAttribute('transform', t.getAttribute('transform'));
+          t.parentNode.insertBefore(r, t);
+        });
+        const out = new XMLSerializer().serializeToString(root);
+        host.remove();
+        return { svg: out };
       } catch (e) {
         return { error: String((e && e.message) || e) };
       }

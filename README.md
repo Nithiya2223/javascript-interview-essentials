@@ -2,14 +2,14 @@
 
 For frontend and full-stack developers with 3–5 years of experience. Explains JavaScript internals the way an interviewer asks about them: why it works, what it prints, and how to implement it yourself. Every chapter has diagrams you can redraw on a whiteboard.
 
-**Status: 1 of 24 chapters written.** The PDF in `dist/` contains the written chapters.
+**Status: 2 of 24 chapters written.** The PDF in `dist/` contains the written chapters.
 
 ## Contents
 
 | # | Chapter | Status | Diagrams |
 |---|---|---|---|
 | 1 | [Execution Context & Call Stack](chapters/01-execution-context.md) | written | 4 Mermaid |
-| 2 | Hoisting & Temporal Dead Zone | planned | |
+| 2 | [Hoisting & Temporal Dead Zone](chapters/02-hoisting-tdz.md) | written | 2 Mermaid |
 | 3 | Scope, Lexical Environment & Scope Chain | planned | |
 | 4 | Closures | planned | |
 | 5 | The this Keyword & Binding Rules | planned | |

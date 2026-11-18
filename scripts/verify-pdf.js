@@ -98,6 +98,14 @@ function svgLabels(file) {
     }
     info.push(`${diagrams} Mermaid diagram(s) found in the PDF; ${labelsChecked} diagram labels matched against page text`);
 
+    // 2b. duplicated words in the text layer (e.g. stroke+fill drawn twice) hurt copy/paste and search
+    // A stroke+fill label shows up as consecutive doubled pairs: "let, let, const, const".
+    const dupRe = /\b(\S{3,})\s+\1\s+(\S{3,})\s+\2\b/g;
+    pages.forEach((t, i) => {
+      const hits = [...t.matchAll(dupRe)].map((m) => `${m[1]} ${m[1]} ${m[2]} ${m[2]}`);
+      if (hits.length) problems.push(`page ${i + 1}: text layer has doubled words (${hits.slice(0, 3).join(' | ')})`);
+    });
+
     // 3. TOC / list of diagrams page numbers
     const firstChapterPage = Math.min(...outline.filter((o) => /^chapter\d/.test(squash(o.title))).map((o) => o.page));
     const front = squash(pages.slice(1, firstChapterPage - 1).join(' '));
