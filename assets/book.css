@@ -122,3 +122,11 @@ tr { break-inside: avoid; }
 
 .where { break-after: avoid; page-break-after: avoid; margin-bottom: 4pt; }
 pre.short:not(.output) { break-after: avoid; page-break-after: avoid; }
+figure.fig.gallery img { max-height: 170mm; }
+figure.fig.gallery { margin: 6pt 0 8pt; }
+
+h3.summary { break-before: page; margin-top: 0; font-size: 14pt; padding-bottom: 3pt; border-bottom: 1.2pt solid #000; }
+h3.summary + p, h3.summary ~ p { font-size: 9pt; }
+/* Chapter 24: each H2 (one-page chapter summaries, gallery, top 25, framework) starts a new page */
+.chapter.ch24 h2 { break-before: page; margin-top: 0; }
+.chapter.ch24 h2:first-of-type { break-before: auto; }

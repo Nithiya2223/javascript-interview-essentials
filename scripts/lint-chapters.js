@@ -54,6 +54,7 @@ function lintChapter(ch) {
 
   // ---- fences
   for (const e of events.filter((x) => x.kind === 'fence')) {
+    if (e.info.includes('`')) err(e.line, 'fence info string contains a backtick (CommonMark rejects it, so the block would not render as code); remove backticks from the caption');
     if (!e.lang) err(e.line, 'code fence without a language label');
     else if (!KNOWN_LANGS.has(e.lang)) warn(e.line, `unusual fence language "${e.lang}"`);
     if (e.lang === 'ascii' && !e.rest) err(e.line, 'ascii diagram needs a caption: ```ascii Caption text');
@@ -80,6 +81,21 @@ function lintChapter(ch) {
     else if (parseInt(m[1], 10) !== ch.num) err(h1[0].line, `H1 says chapter ${m[1]} but file is ${ch.num}`);
   }
 
+  if (ch.num === 22) {
+    const qs = h.filter((x) => x.depth === 3 && /^Q22\.\d+/.test(x.text));
+    if (qs.length < 20) err(1, `chapter 22 needs at least 20 puzzles headed "### Q22.n ...", found ${qs.length}`);
+    qs.forEach((q, i) => { if (!new RegExp('^Q22\\.' + (i + 1) + '\\b').test(q.text)) err(q.line, `puzzle numbering must be sequential (expected Q22.${i + 1})`); });
+  }
+  if (ch.num === 23) {
+    const ps = h.filter((x) => x.depth === 3 && /^P23\.\d+/.test(x.text));
+    if (ps.length !== 30) err(1, `chapter 23 needs exactly 30 problems headed "### P23.n ...", found ${ps.length}`);
+    ps.forEach((q, i) => {
+      if (!new RegExp('^P23\\.' + (i + 1) + '\\b').test(q.text)) err(q.line, `problem numbering must be sequential (expected P23.${i + 1})`);
+      const end = i + 1 < ps.length ? ps[i + 1].line : Infinity;
+      const figs = events.filter((e) => e.kind === 'fence' && e.lang === 'mermaid' && e.line > q.line && e.line < end);
+      if (figs.length < 1) err(q.line, `${q.text.split(' ')[0]}: each problem needs a Mermaid flowchart of the algorithm`);
+    });
+  }
   if (ch.num > 21) return { errors, warnings }; // chapters 22-24 have their own layout
 
   // ---- the 8 required sections, in order

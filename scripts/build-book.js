@@ -94,7 +94,9 @@ function renderChapter(ch, md) {
           return `<h1 id="${id}"><span class="ch-label">Chapter ${m[1]}</span>${esc(m[2])}</h1>\n`;
         }
         headings.push({ depth, id, text, keys: [text] });
-        const cls = depth === 3 && /^Q\d+\.\d+/.test(text) ? ' class="q"' : depth === 2 && /interview questions/i.test(text) ? ' class="questions"' : '';
+        const cls = depth === 3 && /^Q\d+\.\d+/.test(text) ? ' class="q"'
+          : depth === 3 && /^Summary \d+:/.test(text) ? ' class="summary"'
+          : depth === 2 && /interview questions/i.test(text) ? ' class="questions"' : '';
         return `<h${depth} id="${id}"${cls}>${inner}</h${depth}>\n`;
       },
       paragraph({ tokens }) {
@@ -103,7 +105,9 @@ function renderChapter(ch, md) {
         return `<p${where ? ' class="where"' : ''}>${this.parser.parseInline(tokens)}</p>\n`;
       },
       image({ href, text }) {
-        return `<figure class="fig"><img src="${esc(href)}" alt="${esc(text)}"><h6 class="figcap">${esc(text)}</h6></figure>\n`;
+        // alt text starting with "Gallery" renders a smaller reference copy (used by Chapter 24)
+        const cls = /^Gallery/i.test(text) ? 'fig gallery' : 'fig';
+        return `<figure class="${cls}"><img src="${esc(href)}" alt="${esc(text)}"><h6 class="figcap">${esc(text)}</h6></figure>\n`;
       },
       code({ text, lang }) {
         const info = (lang || '').trim();
@@ -231,6 +235,11 @@ async function layoutChecks(page) {
       if (!img.naturalWidth) problems.push(`image failed to load: ${img.getAttribute('src')}`);
       else if (r.right > maxRight) problems.push(`image wider than page: ${img.getAttribute('src')}`);
       else if (r.height > maxH) problems.push(`image taller than page: ${img.getAttribute('src')}`);
+      else {
+        // readability: diagram text is ~14px in the SVG; below 60% scale it prints under ~6.5pt
+        const ratio = r.width / img.naturalWidth;
+        if (ratio < 0.6) problems.push(`diagram printed at ${Math.round(ratio * 100)}% scale (text too small; redesign it narrower or shorter): ${img.getAttribute('src')}`);
+      }
     }
     for (const pre of document.querySelectorAll('pre')) {
       if (pre.scrollWidth > pre.clientWidth + 1) {

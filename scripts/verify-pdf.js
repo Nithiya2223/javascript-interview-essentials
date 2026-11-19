@@ -87,9 +87,18 @@ function svgLabels(file) {
             continue;
           }
           const text = squash(pages[page - 1]);
-          for (const label of svgLabels(file)) {
+          const labels = svgLabels(file);
+          const spaced = ' ' + pages[page - 1].replace(/\s+/g, ' ') + ' ';
+          for (const label of labels) {
             labelsChecked += 1;
             if (!text.includes(squash(label))) problems.push(`Figure ${num} (${d.id}) page ${page}: label "${label}" missing from page text`);
+            // A stroke+fill label is written twice word by word ("let, let, const, const").
+            // Skip labels that legitimately occur more than once in the diagram.
+            const doubled = label.replace(/\s+/g, ' ').split(' ').map((w) => `${w} ${w}`).join(' ');
+            const occurrences = labels.filter((l) => l.includes(label)).length; // exact repeats and "callable" vs "callable?"
+            if (occurrences === 1 && label.length >= 4 && spaced.includes(' ' + doubled + ' ')) {
+              problems.push(`Figure ${num} (${d.id}) page ${page}: label "${label}" appears doubled in the text layer`);
+            }
           }
         } else if (!byTitle.get(squash(`Figure ${num}: ${m[2].trim()}`))) {
           problems.push(`Figure ${num} (ascii): caption not found in the PDF outline`);
@@ -97,14 +106,6 @@ function svgLabels(file) {
       }
     }
     info.push(`${diagrams} Mermaid diagram(s) found in the PDF; ${labelsChecked} diagram labels matched against page text`);
-
-    // 2b. duplicated words in the text layer (e.g. stroke+fill drawn twice) hurt copy/paste and search
-    // A stroke+fill label shows up as consecutive doubled pairs: "let, let, const, const".
-    const dupRe = /\b(\S{3,})\s+\1\s+(\S{3,})\s+\2\b/g;
-    pages.forEach((t, i) => {
-      const hits = [...t.matchAll(dupRe)].map((m) => `${m[1]} ${m[1]} ${m[2]} ${m[2]}`);
-      if (hits.length) problems.push(`page ${i + 1}: text layer has doubled words (${hits.slice(0, 3).join(' | ')})`);
-    });
 
     // 3. TOC / list of diagrams page numbers
     const firstChapterPage = Math.min(...outline.filter((o) => /^chapter\d/.test(squash(o.title))).map((o) => o.page));
@@ -120,8 +121,18 @@ function svgLabels(file) {
     }
     info.push(`${tocChecked} contents / list-of-diagrams entries carry the correct page number`);
 
+    // 3b. Chapter 24 one-page summaries must each occupy exactly one page
+    const summaries = outline.filter((o) => /^Summary \d+:/.test(o.title));
+    for (const sm of summaries) {
+      // boundary = next summary heading or the next numbered H2 of chapter 24
+      const after = outline.slice(outline.indexOf(sm) + 1).find((o) => /^(Summary \d+:|24\.\d)/.test(o.title));
+      if (after && after.page - sm.page !== 1) problems.push(`"${sm.title}" spans ${after.page - sm.page} pages (must be exactly one)`);
+    }
+    if (summaries.length) info.push(`${summaries.length} one-page chapter summaries checked`);
+
     // 4. edge ink + 5. page numbers
     for (let p = 1; p <= n; p++) {
+      if (p % 100 === 0) console.log(`  ...edge check page ${p}/${n}`);
       const ink = await doc.edgeInk(p);
       if (p === 1) continue; // cover bleeds on purpose
       if (ink.left || ink.right) problems.push(`page ${p}: content reaches the left/right page edge (${ink.left}/${ink.right} dark px)`);

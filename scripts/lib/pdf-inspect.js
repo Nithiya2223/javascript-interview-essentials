@@ -52,7 +52,9 @@ async function openPdf(buffer) {
       return page.evaluate(async (n) => {
         const p = await window.__doc.getPage(n);
         const tc = await p.getTextContent();
-        return tc.items.map((i) => i.str).join(' ');
+        const out = tc.items.map((i) => i.str).join(' ');
+        p.cleanup();
+        return out;
       }, n);
     },
     async allText() {
@@ -73,7 +75,11 @@ async function openPdf(buffer) {
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         await p.render({ canvasContext: ctx, viewport: vp }).promise;
-        return canvas.toDataURL('image/png');
+        const url = canvas.toDataURL('image/png');
+        canvas.width = 0;
+        canvas.height = 0;
+        p.cleanup();
+        return url;
       }, { n, scale });
       fs.mkdirSync(path.dirname(outFile), { recursive: true });
       fs.writeFileSync(outFile, Buffer.from(dataUrl.split(',')[1], 'base64'));
@@ -101,7 +107,7 @@ async function openPdf(buffer) {
           for (let i = 0; i < d.length; i += 4) if (d[i] < 140 && d[i + 3] > 0) c++;
           return c;
         };
-        return {
+        const res = {
           left: count(0, 0, 9 * mm, canvas.height),
           right: count(canvas.width - 9 * mm, 0, 9 * mm, canvas.height),
           top: count(0, 0, canvas.width, 6 * mm),
@@ -109,6 +115,11 @@ async function openPdf(buffer) {
           width: canvas.width,
           height: canvas.height,
         };
+        // release everything: a 700-page book otherwise exhausts the renderer's memory
+        canvas.width = 0;
+        canvas.height = 0;
+        p.cleanup();
+        return res;
       }, n);
     },
     async close() {
